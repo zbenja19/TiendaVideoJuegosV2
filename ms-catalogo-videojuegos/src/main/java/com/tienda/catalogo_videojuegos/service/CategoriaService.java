@@ -1,0 +1,75 @@
+package com.tienda.catalogo_videojuegos.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tienda.catalogo_videojuegos.DTO.CategoriaDTO;
+import com.tienda.catalogo_videojuegos.model.Categoria;
+import com.tienda.catalogo_videojuegos.repository.CategoriaRepository;
+import com.tienda.catalogo_videojuegos.repository.VideoJuegoRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class CategoriaService {
+
+    
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private VideoJuegoRepository videojuegoRepository;
+
+    //METODOS
+    public List <CategoriaDTO> listarTodos(){
+        return categoriaRepository.findAll().stream()
+        .map(this::convertirADTO).toList();
+    }
+
+    public Categoria guardar(Categoria categoria){
+        return categoriaRepository.save(categoria);       
+    }
+
+    public String eliminar(Integer id){
+
+        Categoria categoria = categoriaRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("No encontrada"));
+        
+        if (!videojuegoRepository.buscarVideoJuegos(id).isEmpty()){
+            throw new RuntimeException("La categoria no se puede eliminar, tiene juegos asociados");
+        }
+        categoriaRepository.delete(categoria);
+        return "Categoria"+categoria.getNombre()+"Eliminada exitosamente";
+    }
+
+    public CategoriaDTO buscarPorId(Integer id){
+        Categoria categoria = categoriaRepository.findById(id)
+           .orElseThrow(() -> new RuntimeException("¡La categoria no esta registrado!"));
+        return convertirADTO(categoria);
+    }
+
+    public CategoriaDTO actualizarCategoria(Integer id,Categoria categoriaNva){
+        Categoria categoria = categoriaRepository.findById(id)
+         .orElseThrow(() -> new RuntimeException("No encontrada"));
+         if(categoriaNva.getNombre() != null){
+            categoria.setNombre(categoriaNva.getNombre());
+         }
+         if (categoriaNva.getDescripcion() != null){
+            categoria.setDescripcion(categoriaNva.getDescripcion());
+         }
+         Categoria categoriaActualizada = categoriaRepository.save(categoria);
+         return convertirADTO(categoriaActualizada);
+    }
+
+    private CategoriaDTO convertirADTO(Categoria categoria) {
+        CategoriaDTO categoriaDTO = new CategoriaDTO();
+        
+        categoriaDTO.setIdCategoria(categoria.getIdCategoria());
+        categoriaDTO.setNombre(categoria.getNombre());
+        categoriaDTO.setDescripcion(categoria.getDescripcion());
+
+        return categoriaDTO;
+    }
+}
