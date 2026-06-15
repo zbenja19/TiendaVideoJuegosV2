@@ -44,5 +44,20 @@ Buscando mejor organización del sistema al querer mantener el orden los video j
 1. **Clonar el repositorio:**
 
 ```bash
-git clone
-cd
+git clone https://github.com/zbenja19/TiendaVideoJuegosV2.git
+cd TiendaVideoJuegosV2
+
+2. **Levantar la infraestructura (Bases de datos/Broker):**
+
+  ```bash
+
+  docker-compose up -d
+
+3. **Compilar y ejecutar los servicios:**
+ ```bash
+
+  # Ejecutar en terminales separadas para cada microservicio
+
+  ./mvnw spring-boot:run
+
+  ```
