@@ -28,3 +28,21 @@ Buscando mejor organización del sistema al querer mantener el orden los video j
 5. **Biblioteca** | "/api/v1/biblioteca" | POST | Agregar nuevos video juegos dentro de la biblioteca.
 6. **Pago** | "/api/v1/pagos" | POST | Agregar metodos de pago.
 7. **Proveedor** | "/api/v1/proveedor" | PUT | Actualizar datos del proveedor.   
+
+
+## 🚀 Instrucciones de Ejecución
+
+### 💻 Ejecución Local
+
+#### Prerrequisitos
+1. Java JDK 21+
+2. Node.js
+3. Docker Desktop/ Xammp/ Postman
+
+#### Pasos para iniciar:
+
+1. **Clonar el repositorio:**
+
+```bash
+git clone
+cd
