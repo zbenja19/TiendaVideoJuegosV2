@@ -1,6 +1,6 @@
 package com.tiendavideojuegos.tiendavideojuegos.DTO;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -8,7 +8,8 @@ import lombok.Data;
 public class PedidosDTO {
 
     private Integer id;
-    private Date fechaAgregada;
+    private Integer clienteId;
+    private LocalDate fechaAgregada;
     private Double montoTotal;
     private Boolean estado;
 }

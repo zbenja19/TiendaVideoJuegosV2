@@ -14,7 +14,7 @@ public interface PedidosRepository extends JpaRepository<Pedidos, Integer> {
 
     List<Pedidos> findByEstado(Boolean estado);
 
-    @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.cliente.id = :clienteId")
+    @Query("SELECT SUM(p.montoTotal) FROM Pedidos p WHERE p.cliente.id = :clienteId")
     Double moneycalculeitor(@Param("clienteId") Integer clienteId);
 
 }
