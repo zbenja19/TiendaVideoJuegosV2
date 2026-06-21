@@ -17,19 +17,34 @@ import com.tienda.catalogo_videojuegos.DTO.ProveedorDTO;
 import com.tienda.catalogo_videojuegos.model.Proveedor;
 import com.tienda.catalogo_videojuegos.service.ProveedorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/proveedores")
+@Tag(name = "Proveedores",description = "Operaciones para la gestion de proveedores")
 public class ProveedorController {
     
     @Autowired
     private ProveedorService proveedorService;
 
     @GetMapping
-    public List<ProveedorDTO> listar(){
-        return proveedorService.listarTodos();
+    @Operation(summary="Obtiene una lista" , description="Retorna una lista de todos los proveedores")
+    @ApiResponse(responseCode="200", description= "Lista de proveedores obtenida correctamente")
+    @ApiResponse(responseCode="204", description= "No existen proveedores registrados")
+    public ResponseEntity <List<ProveedorDTO>> listar(){
+        List<ProveedorDTO> proveedores = proveedorService.listarTodos();
+        if (proveedores.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(proveedores, HttpStatus.OK);
     }
 
     @GetMapping ("/{id}")
+    @Operation(summary = "Buscar proveedor por id", description = "Retorna un proveedor segun su id")
+    @ApiResponse(responseCode = "200", description = "Proveedor encontrado")
+    @ApiResponse(responseCode = "404", description = "Proveedor no encontrado")
     public ResponseEntity<?> buscarPorId (@PathVariable Integer id){
         try {
             ProveedorDTO proveedorDTO = proveedorService.buscarPorId(id);
@@ -40,6 +55,9 @@ public class ProveedorController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear proveedor", description = "Crea un nuevo proveedor")
+    @ApiResponse(responseCode = "201", description = "Proveedor creado correctamente")
+    @ApiResponse(responseCode = "400", description = "Datos invalidos")
     public ResponseEntity<?> guardar(@RequestBody Proveedor proveedor){
         try {
             Proveedor proveedorGuardado = proveedorService.guardarProveedor(proveedor);
@@ -50,6 +68,9 @@ public class ProveedorController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza proveedor", description = "Actualiza el proveedor existente")
+    @ApiResponse(responseCode = "200", description = "Actualizado exitosamente")
+    @ApiResponse(responseCode = "404", description = "Proveedor no encontrado")
     public ResponseEntity<?> actualizar (@PathVariable Integer id, @RequestBody Proveedor nvoProveedor){
         try {
             ProveedorDTO actualizado = proveedorService.actualizarProveedor(id, nvoProveedor);
@@ -61,6 +82,9 @@ public class ProveedorController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina proveedor", description = "Elimina el proveedor por id")
+    @ApiResponse(responseCode = "200", description = "Proveedor eliminado correctamente")
+    @ApiResponse(responseCode = "404", description = "Proveedor no encontrado")
     public ResponseEntity<?>eliminar (@PathVariable Integer id){
         try {
             String mensajeEliminar = proveedorService.eliminar(id);
