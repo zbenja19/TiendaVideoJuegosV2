@@ -24,14 +24,21 @@ public class ProveedorService {
     }
 
     public Proveedor guardarProveedor(Proveedor proveedor){
-        return proveedorRepository.save(proveedor);       
+        proveedor.setNombre(proveedor.getNombre().trim());   
+        boolean existeProveedor = proveedorRepository.existsByNombreIgnoreCase(proveedor.getNombre());
+        
+        if (existeProveedor){
+            throw new RuntimeException("El Proveedor " + proveedor.getNombre() + " ya se encuentra registrado.");
+            
+        }return proveedorRepository.save(proveedor);     
     }
 
     public String eliminar(Integer id) {
         Proveedor proveedor = proveedorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("No se ha podido eliminar, el ID " + id + " no existe."));
+            .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
+
             proveedorRepository.delete(proveedor);
-            return "El proveedor '" + proveedor.getNombre() + "' ha sido eliminado exitosamente";
+            return "El proveedor " + proveedor.getNombre() + " Eliminado exitosamente";
     }
 
     public ProveedorDTO buscarPorId(Integer id){
@@ -44,7 +51,7 @@ public class ProveedorService {
         Proveedor proveedordDto = proveedorRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("¡El Proveedor no esta registrado!"));
         if(nvoProveedor.getNombre() != null){
-            proveedordDto.setNombre(nvoProveedor.getNombre());
+            proveedordDto.setNombre(nvoProveedor.getNombre().trim());
         }
         if(nvoProveedor.getEmail() != null){
             proveedordDto.setEmail(nvoProveedor.getEmail());

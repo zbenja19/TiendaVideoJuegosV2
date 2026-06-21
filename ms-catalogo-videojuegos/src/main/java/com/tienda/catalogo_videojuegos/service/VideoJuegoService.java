@@ -25,28 +25,34 @@ public class VideoJuegoService {
     }
 
     public VideoJuego guardar(VideoJuego videoJuego){
-        return videojuegoRepository.save(videoJuego);       
+        videoJuego.setNombre(videoJuego.getNombre().trim());   
+        boolean existeVideoJuego = videojuegoRepository.existsByNombreIgnoreCase(videoJuego.getNombre());
+        
+        if (existeVideoJuego){
+            throw new RuntimeException("El Videojuego" + videoJuego.getNombre() + "ya de encuentra registrado.");
+            
+        }return videojuegoRepository.save(videoJuego);
     }
 
     public String eliminar(Integer id){
         VideoJuego videoJ = videojuegoRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("VideoJuego no encontrado"));
+        .orElseThrow(() -> new RuntimeException("VideoJuego no encontrado."));
     
         videojuegoRepository.delete(videoJ);
-        return "Videojuego"+  videoJ.getNombre()+"Eliminado exitosamente";
+        return "El videojuego" + videoJ.getNombre() + "eliminado exitosamente.";
     } 
 
     public VideoJuegoDTO buscarPorId(Integer id){
         VideoJuego videojuego = videojuegoRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Videojuego no encontrado"));
+        .orElseThrow(() -> new RuntimeException("Videojuego no encontrado."));
         return convertirADTO(videojuego);
     }
 
     public List<VideoJuego> buscarPornombre(String nombre){
-        List<VideoJuego> juegos = videojuegoRepository.findByNombreContaining(nombre);
+        List<VideoJuego> juegos = videojuegoRepository.findByNombreContainingIgnoreCase(nombre);
 
         if(juegos.isEmpty()){
-            throw new RuntimeException("No se encontraron videosjuego asociados al nombre"+ nombre);
+            throw new RuntimeException("No se encontraron videosjuego asociados al nombre" + nombre);
         }
         return juegos;
     }
@@ -56,7 +62,7 @@ public class VideoJuegoService {
         .orElseThrow(() -> new RuntimeException("¡El Videojuego no esta registrado!"));
        
         if(nvoVideoJuego.getNombre() != null){
-            videojuegoDTO.setNombre(nvoVideoJuego.getNombre());
+            videojuegoDTO.setNombre(nvoVideoJuego.getNombre().trim());
         }
         if(nvoVideoJuego.getDescripcion() != null){
             videojuegoDTO.setDescripcion(nvoVideoJuego.getDescripcion());

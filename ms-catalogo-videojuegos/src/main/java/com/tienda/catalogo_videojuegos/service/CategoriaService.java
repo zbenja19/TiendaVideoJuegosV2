@@ -29,19 +29,22 @@ public class CategoriaService {
     }
 
     public Categoria guardar(Categoria categoria){
-        return categoriaRepository.save(categoria);       
+        categoria.setNombre(categoria.getNombre().trim());   
+        boolean existeCategoria = categoriaRepository.existsByNombreIgnoreCase(categoria.getNombre());
+        
+        if (existeCategoria){
+            throw new RuntimeException("El Videojuego" + categoria.getNombre() + "ya se encuentra registrado");
+            
+        }return categoriaRepository.save(categoria);    
     }
 
     public String eliminar(Integer id){
-
         Categoria categoria = categoriaRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("No encontrada"));
-        
-        if (!videojuegoRepository.buscarVideoJuegos(id).isEmpty()){
-            throw new RuntimeException("La categoria no se puede eliminar, tiene juegos asociados");
-        }
+        .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+    
         categoriaRepository.delete(categoria);
-        return "Categoria"+categoria.getNombre()+"Eliminada exitosamente";
+        return "Categoria" + categoria.getNombre() + "eliminada exitosamente.";
+
     }
 
     public CategoriaDTO buscarPorId(Integer id){
