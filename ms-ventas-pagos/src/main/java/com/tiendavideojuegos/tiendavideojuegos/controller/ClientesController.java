@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tiendavideojuegos.tiendavideojuegos.DTO.ClientesDTO;
+import com.tiendavideojuegos.tiendavideojuegos.model.Clientes;
 import com.tiendavideojuegos.tiendavideojuegos.service.ClientesService;
 
 @RestController
@@ -37,7 +38,7 @@ public class ClientesController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientesDTO> crearCliente(@RequestBody ClientesDTO Clientes) {
+    public ResponseEntity<ClientesDTO> crearCliente(@RequestBody Clientes Clientes) {
         return ResponseEntity.ok(clientesservice.guardar(Clientes));
     }
 
