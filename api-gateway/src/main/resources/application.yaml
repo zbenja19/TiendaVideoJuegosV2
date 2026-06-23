@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: api-gateway
+
+
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: catalogo-service
+              uri: http://127.0.0.1:8081
+              predicates:
+                - Path=/api/v1/videojuegos/**
+
+            - id: marketing-service
+              uri: http://127.0.0.1:8082
+              predicates:
+                - Path=/api/v1/marketing/**
+            
+            - id: ventas-service
+              uri: http://127.0.0.1:8083
+              predicates:
+                - Path=/api/v1/pagos/**
