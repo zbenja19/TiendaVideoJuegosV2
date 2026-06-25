@@ -16,20 +16,35 @@ import com.tienda.catalogo_videojuegos.DTO.CategoriaDTO;
 import com.tienda.catalogo_videojuegos.model.Categoria;
 import com.tienda.catalogo_videojuegos.service.CategoriaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/categorias")
+@Tag(name = "Categorias",description = "Operaciones para la gestion de categorias")
 public class CategoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
 
     @GetMapping
-    public List<CategoriaDTO> listar(){
-        return categoriaService.listarTodos();
+    @Operation(summary="Obtiene una lista" , description="Retorna una lista de todas las categorias")
+    @ApiResponse(responseCode="200", description= "Lista de categorias obtenida correctamente")
+    @ApiResponse(responseCode="204", description= "No existen categorias registradas")
+    public ResponseEntity <List<CategoriaDTO>> listar(){
+        List<CategoriaDTO> categorias = categoriaService.listarTodos();
+        if (categorias.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categorias, HttpStatus.OK);
 
     }
 
     @GetMapping ("/{id}")
+    @Operation(summary = "Buscar categoria por id", description = "Retorna una categoria segun su id")
+    @ApiResponse(responseCode = "200", description = "Categoria encontrada")
+    @ApiResponse(responseCode = "404", description = "Categoria no encontrada")
     public ResponseEntity<?> buscarPorId (@PathVariable Integer id){
         try {
             CategoriaDTO categoriaDTO = categoriaService.buscarPorId(id);
@@ -40,6 +55,9 @@ public class CategoriaController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear categoria", description = "Crea una nueva categoria")
+    @ApiResponse(responseCode = "201", description = "Categoria creada correctamente")
+    @ApiResponse(responseCode = "400", description = "Datos invalidos")
     public ResponseEntity<?> guardar(@RequestBody Categoria categoria){
         try {
             Categoria categoriaGuardada = categoriaService.guardar(categoria);
@@ -50,6 +68,9 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza categoria", description = "Actualiza la categoria existente")
+    @ApiResponse(responseCode = "200", description = "Actualizada exitosamente")
+    @ApiResponse(responseCode = "404", description = "Categoria no encontrada")
     public ResponseEntity<?> actualizar (@PathVariable Integer id, @RequestBody Categoria categoria){
         try {
             CategoriaDTO actualizada = categoriaService.actualizarCategoria(id, categoria);
@@ -61,7 +82,10 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?>eliminar (@PathVariable Integer id){
+    @Operation(summary = "Elimina categoria", description = "Elimina la categoria por id")
+    @ApiResponse(responseCode = "200", description = "Categoria eliminada correctamente")
+    @ApiResponse(responseCode = "404", description = "Categoria no encontrada")
+    public ResponseEntity<?> eliminar (@PathVariable Integer id){
         try {
             String mensajeEliminar = categoriaService.eliminar(id);
             return new ResponseEntity<>(mensajeEliminar,HttpStatus.OK);

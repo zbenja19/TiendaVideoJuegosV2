@@ -7,6 +7,6 @@ import com.tienda.catalogo_videojuegos.model.Proveedor;
 @Repository
 public interface  ProveedorRepository  extends JpaRepository<Proveedor, Integer>{
 
-
+    boolean existsByNombreIgnoreCase(String nombre);
 
 }

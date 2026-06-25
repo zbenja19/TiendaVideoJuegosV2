@@ -18,19 +18,34 @@ import com.tienda.catalogo_videojuegos.DTO.VideoJuegoDTO;
 import com.tienda.catalogo_videojuegos.model.VideoJuego;
 import com.tienda.catalogo_videojuegos.service.VideoJuegoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
-@RequestMapping("/api/v1/videojuegos")//http://localhost:8081/api/v1/videojuegos
+@RequestMapping("/api/v1/videojuegos")
+@Tag(name = "Videojuegos",description = "Operaciones para la gestion del catalogo de videojuegos")
 public class VideoJuegoController {
 
     @Autowired
     private VideoJuegoService videoJuegoService;
 
     @GetMapping
-    public List<VideoJuegoDTO> listar(){
-        return videoJuegoService.listarTodos();
+    @Operation(summary = "Obtiene una lista", description = "Retorna una lista de todos los videojuegos")
+    @ApiResponse(responseCode = "200", description = "Lista de videojuegos obtenida correctamente")
+    @ApiResponse(responseCode="204", description= "No existen videojuegos registrados")
+    public ResponseEntity<List<VideoJuegoDTO>> listar(){
+        List<VideoJuegoDTO> videoJuegos = videoJuegoService.listarTodos();
+        if (videoJuegos.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(videoJuegos, HttpStatus.OK);
     }
 
     @GetMapping ("/{id}")
+    @Operation(summary = "Buscar videojuego por id", description = "Retorna un videojuego segun su id")
+    @ApiResponse(responseCode = "200", description = "Videojuego encontrado")
+    @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     public ResponseEntity<?> buscarPorId (@PathVariable Integer id){
         try {
             VideoJuegoDTO videoJuegoDTO = videoJuegoService.buscarPorId(id);
@@ -41,11 +56,16 @@ public class VideoJuegoController {
     }
 
     @GetMapping("/buscar")
+    @Operation(summary = "Buscar videojuego por nombre", description = "Retorna unael videojuego que coincide con el nombre buscado")
+    @ApiResponse (responseCode = "200", description = "Busqueda efectuada correctamente")
     public List<VideoJuego> buscarPorNombre (@RequestParam String nombre){
         return videoJuegoService.buscarPornombre(nombre);
     }
 
     @PostMapping
+    @Operation(summary = "Crear videojuego", description = "Crea un nuevo videojuego")
+    @ApiResponse(responseCode = "201", description = "Videojuego creado correctamente")
+    @ApiResponse(responseCode = "400", description = "Datos invalidos")
     public ResponseEntity<?> guardar(@RequestBody VideoJuego videoJuego){
         try {
             VideoJuego videoJuegoGuardado = videoJuegoService.guardar(videoJuego);
@@ -56,6 +76,9 @@ public class VideoJuegoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza videojuego", description = "Actualiza el videojuego existente")
+    @ApiResponse(responseCode = "200", description = "Actualizado exitosamente")
+    @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     public ResponseEntity<?> actualizar (@PathVariable Integer id, @RequestBody VideoJuego videoJuego){
         try {
             VideoJuegoDTO actualizado = videoJuegoService.actualizarVideoJuego(id, videoJuego);
@@ -67,6 +90,9 @@ public class VideoJuegoController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina videojuego", description = "Elimina el videojuego por id")
+    @ApiResponse(responseCode = "200", description = "Videojuego eliminado correctamente")
+    @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
     public ResponseEntity<?>eliminar (@PathVariable Integer id){
         try {
             String mensajeEliminar = videoJuegoService.eliminar(id);

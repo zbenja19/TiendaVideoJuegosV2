@@ -11,8 +11,11 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class PlataformaService {
 
-     @Autowired
+    @Autowired
     private PlataformaRepository plataformaRepository;
+
+    @Autowired
+    private PlataformaValidaciones plataformaValidaciones;
 
     public List<Plataforma> obtenerTodas() {
         return plataformaRepository.findAll();
@@ -24,25 +27,31 @@ public class PlataformaService {
     }
 
     public Plataforma guardar(Plataforma plataforma) {
-        return plataformaRepository.save(plataforma);
+         if(!plataformaValidaciones.validarNullVacio(plataforma)){
+            throw new RuntimeException("Debes ingresar el nombre de la categoria");
+        }
+        plataforma.setNombre(plataforma.getNombre().trim());   
+        boolean existePlataforma = plataformaRepository.existsByNombreIgnoreCase(plataforma.getNombre());
+        
+        if (existePlataforma){
+            throw new RuntimeException("La Plataforma " + plataforma.getNombre() + " ya se encuentra registrada");
+            
+        }return plataformaRepository.save(plataforma);
     }
 
     public String eliminar(Integer id) {
-        try {
-            Plataforma plataforma = plataformaRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("¡Error! La plataforma con ID " + id + " no existe."));
-            plataformaRepository.delete(plataforma);
-            return "La plataforma '" + plataforma.getNombre() + "' ha sido eliminada.";
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
+        Plataforma plataforma = plataformaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Plataforma no encontrado."));
+    
+        plataformaRepository.delete(plataforma);
+        return "Plataforma" + plataforma.getNombre() + "Eliminada exitosamente.";
     }
 
     public Plataforma actualizarPlataforma(Integer id,Plataforma nvaPlataforma){
         Plataforma plataforma = plataformaRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("¡La plataforma no esta registrada!"));
+        .orElseThrow(() -> new RuntimeException("Plataforma no encontrada"));
         if(nvaPlataforma.getNombre() != null){
-            plataforma.setNombre(nvaPlataforma.getNombre());
+            plataforma.setNombre(nvaPlataforma.getNombre().trim());
         }
         return plataformaRepository.save(plataforma);
     }
