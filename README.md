@@ -1,30 +1,37 @@
-## TiendaVideoJuegosV2
+## Tienda Video Juegos 
+## V1 del apartado ventas-pagos
 
-## RepositorioTiendaVideoJuegos
+## En esta etapa se contruyo la base del backend, con el modelo tipico de Spring Boot:
+1. model
+2. repository
+3. service
+4. controller
+5. DTO
+6. config
 
-# Integrantes del Proyecto
-1. **Benjamín Trujillo**
-2. **Matías Oviedo**
-3. **Karol Carrasco**
+## Clases implementadas
+1. Clientes
+2. DetallePedidos
+3. Pedidos
+4. Pago
 
-## Descripción del proyecto
-El proyecto consiste en una plataforma especializada en una tienda de venta de video juegos digitales. La plataforma permite visualizar un catálogo de juegos, el cual va por distintintas categorías de video juegos.
-Buscando mejor organización del sistema al querer mantener el orden los video juegos dentro de la tienda.
+## Model
+Dentro del model se asignaros atributos base a las clases creadas.
 
-## Listado de Microservicios Implementados 
-1. **Registro de Usuarios**
-2. **Pedidos y detalle de pedidos**
-3. **Ofertas y detalles de ofertas**
-4. **Metodos de pago**
-5. **Plataforma de los video juegos**
-6. **Proveedores**
-7. **Biblioteca de video juegos**
+## Repository
+Se crearon las interfaces que se conectan con la base de datos, extendiendo de JpaRepository. 
+Esto permite guardar, buscar, actualizar y eliminar información sin tener que escribir consultas SQL manualmente.
 
-## Rutas principales del Gateway
-1. **Usuario** | "/api/v1/clientes" | GET | Listar a todos los clientes y buscar alguno en especifico por su id.
-2. **Videojuegos** | "/api/v1/Videojuegos" | GET | Listar video juegos de la tienda y buscar por id o categoría.
-3. **Pedidos** | "/api/v1/pedidos/" | GET | Listar los pedidos realizados.
-4. **Ofertas** | ""/api/v1/ofertas" | POST | Agregar nuevas ofertas de video juegos dentro de la tienda.
-5. **Biblioteca** | "/api/v1/biblioteca" | POST | Agregar nuevos video juegos dentro de la biblioteca.
-6. **Pago** | "/api/v1/pagos" | POST | Agregar metodos de pago.
-7. **Proveedor** | "/api/v1/proveedor" | PUT | Actualizar datos del proveedor.   
+## Service
+Aqui se aplica la logica de negocio, manejando las operaciones principales del codigo, (crear, buscar, actulizar, eliminar).
+
+## Controller
+Se crearon los controladores que exponen los endpoints de la API 
+(rutas que se pueden llamar desde Postman o el frontend), conectando las peticiones HTTP con la lógica del Service.
+
+## DTO
+Se crearon clases DTO (Data Transfer Object) para controlar exactamente qué información se entrega al cliente que consume la API, 
+sin exponer todos los campos del modelo.
+
+## Config
+Se creó la clase WebClientConfig, donde se configura el WebClient.Builder como un Bean de Spring.
