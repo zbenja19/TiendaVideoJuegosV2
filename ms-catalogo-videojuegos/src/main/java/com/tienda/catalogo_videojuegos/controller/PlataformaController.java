@@ -57,12 +57,12 @@ public class PlataformaController {
     @Operation(summary = "Crear plataforma", description = "Crea una nueva plataforma")
     @ApiResponse(responseCode = "201", description = "Plataforma creada correctamente")
     @ApiResponse(responseCode = "400", description = "Datos invalidos")
-    public ResponseEntity<Plataforma> guardar(@RequestBody Plataforma plataforma) {
+    public ResponseEntity<?> guardar(@RequestBody Plataforma plataforma) {
         try {
             Plataforma guardada = plataformaService.guardar(plataforma);
             return new ResponseEntity<>(guardada, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error al guardar: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

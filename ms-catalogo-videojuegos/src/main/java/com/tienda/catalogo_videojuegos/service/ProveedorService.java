@@ -16,14 +16,23 @@ public class ProveedorService {
     @Autowired
     private ProveedorRepository proveedorRepository;
 
+    @Autowired
+    private ProveedorValidaciones proveedorValidaciones;
+
     //Metodos
     public List <ProveedorDTO> listarTodos(){
         return proveedorRepository.findAll().stream()
-                        .map(this::convertirADTO)
+                        .map(proveedorValidaciones::convertirADTO)
                         .toList();
     }
 
     public Proveedor guardarProveedor(Proveedor proveedor){
+        if(!proveedorValidaciones.validarNullVacio(proveedor)){
+            throw new RuntimeException("Debes ingresar el nombre del proveedor");
+        }
+        proveedorValidaciones.validarEmail(proveedor.getEmail());
+        proveedorValidaciones.validarTelefono(proveedor.getTelefono());
+
         proveedor.setNombre(proveedor.getNombre().trim());   
         boolean existeProveedor = proveedorRepository.existsByNombreIgnoreCase(proveedor.getNombre());
         
@@ -43,13 +52,13 @@ public class ProveedorService {
 
     public ProveedorDTO buscarPorId(Integer id){
         Proveedor proveedor = proveedorRepository.findById(id)
-           .orElseThrow(() -> new RuntimeException("¡El Proveedor no esta registrado!"));
-        return convertirADTO(proveedor);
+           .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
+        return proveedorValidaciones.convertirADTO(proveedor);
     }
 
     public ProveedorDTO actualizarProveedor(Integer id,Proveedor nvoProveedor){
         Proveedor proveedordDto = proveedorRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("¡El Proveedor no esta registrado!"));
+        .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
         if(nvoProveedor.getNombre() != null){
             proveedordDto.setNombre(nvoProveedor.getNombre().trim());
         }
@@ -60,21 +69,7 @@ public class ProveedorService {
             proveedordDto.setTelefono(nvoProveedor.getTelefono());
         }
         Proveedor proveedorActualizado = proveedorRepository.save(proveedordDto);
-        return convertirADTO(proveedorActualizado);
+        return proveedorValidaciones.convertirADTO(proveedorActualizado);
     }
     
-    private ProveedorDTO convertirADTO(Proveedor proveedor) {
-        ProveedorDTO proveedorDTO = new ProveedorDTO();
-        
-        proveedorDTO.setNombre(proveedor.getNombre());
-        proveedorDTO.setEmail(proveedor.getEmail());
-        proveedorDTO.setTelefono(proveedor.getTelefono());
-
-        if (proveedor.getIdProveedor() != null) {
-            proveedorDTO.setIdProveedor(proveedor.getIdProveedor());
-        } else {
-            proveedorDTO.setIdProveedor(null);
-        }
-        return proveedorDTO;
-    }
 }

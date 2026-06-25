@@ -14,6 +14,9 @@ public class PlataformaService {
     @Autowired
     private PlataformaRepository plataformaRepository;
 
+    @Autowired
+    private PlataformaValidaciones plataformaValidaciones;
+
     public List<Plataforma> obtenerTodas() {
         return plataformaRepository.findAll();
     }
@@ -24,11 +27,14 @@ public class PlataformaService {
     }
 
     public Plataforma guardar(Plataforma plataforma) {
+         if(!plataformaValidaciones.validarNullVacio(plataforma)){
+            throw new RuntimeException("Debes ingresar el nombre de la categoria");
+        }
         plataforma.setNombre(plataforma.getNombre().trim());   
         boolean existePlataforma = plataformaRepository.existsByNombreIgnoreCase(plataforma.getNombre());
         
         if (existePlataforma){
-            throw new RuntimeException("La Plataforma" + plataforma.getNombre() + "ya se encuentra registrada");
+            throw new RuntimeException("La Plataforma " + plataforma.getNombre() + " ya se encuentra registrada");
             
         }return plataformaRepository.save(plataforma);
     }
@@ -43,9 +49,9 @@ public class PlataformaService {
 
     public Plataforma actualizarPlataforma(Integer id,Plataforma nvaPlataforma){
         Plataforma plataforma = plataformaRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("¡La plataforma no esta registrada!"));
+        .orElseThrow(() -> new RuntimeException("Plataforma no encontrada"));
         if(nvaPlataforma.getNombre() != null){
-            plataforma.setNombre(nvaPlataforma.getNombre());
+            plataforma.setNombre(nvaPlataforma.getNombre().trim());
         }
         return plataformaRepository.save(plataforma);
     }

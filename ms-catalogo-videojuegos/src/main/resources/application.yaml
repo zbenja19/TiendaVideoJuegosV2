@@ -1,0 +1,29 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: ms-catalogo-videojuegos
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_catalogo_videojuegos?createDatabaseIfNotExist=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+springdoc:
+  api-docs:
+    enabled: true
+
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
