@@ -46,7 +46,7 @@ Buscando mejor organización del sistema al querer mantener el orden los video j
 git clone https://github.com/zbenja19/TiendaVideoJuegosV2.git
 cd TiendaVideoJuegosV2
 
-2. **Levantar la infraestructura (Bases de datos/Broker):**
+2. **Levantar la infraestructura (Bases de datos/Docker):**
 
   ```bash
 
