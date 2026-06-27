@@ -1,10 +1,12 @@
 package com.tiendavideojuegos.tiendavideojuegos.controller.v2;
 
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,58 +17,78 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tiendavideojuegos.tiendavideojuegos.DTO.PedidosDTO;
+import com.tiendavideojuegos.tiendavideojuegos.assemblers.PedidosModelAssembler;
 import com.tiendavideojuegos.tiendavideojuegos.service.PedidosService;
+
+import jakarta.validation.Valid;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController("PedidosControllerV2")
 @RequestMapping("/api/v2/Pedidos")
 public class PedidosController {
+
     @Autowired
     private PedidosService pedidoService;
 
-    @GetMapping
-    public ResponseEntity<List<PedidosDTO>> obtenerTodos() {
-        List<PedidosDTO> pedidos = pedidoService.obtenerTodos();
+    @Autowired
+    private PedidosModelAssembler assembler;
+
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<CollectionModel<EntityModel<PedidosDTO>>> obtenerTodos() {
+        List<EntityModel<PedidosDTO>> pedidos = pedidoService.obtenerTodos().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
         if (pedidos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.noContent().build();
         }
-        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+
+        return ResponseEntity.ok(CollectionModel.of(
+                pedidos,
+                linkTo(methodOn(PedidosController.class).obtenerTodos()).withSelfRel()
+        ));
     }
 
-    @GetMapping("/cliente/{clienteId}/total")
+    @GetMapping(value = "/cliente/{clienteId}/total", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<Double> obtenerTotalCliente(@PathVariable Integer clienteId) {
-    Double total = pedidoService.gastosTotalescliente(clienteId); 
-    return new ResponseEntity<>(total, HttpStatus.OK);
+        Double total = pedidoService.gastosTotalescliente(clienteId);
+        return ResponseEntity.ok(total);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PedidosDTO> buscarPorId(@PathVariable Integer id) {
+    @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<PedidosDTO>> buscarPorId(@PathVariable Integer id) {
         try {
             PedidosDTO dto = pedidoService.buscarPorId(id);
-            return new ResponseEntity<>(dto, HttpStatus.OK);
+            if (dto == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(assembler.toModel(dto));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping
-    public ResponseEntity<PedidosDTO> guardar(@RequestBody PedidosDTO pedidos) {
+    @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<PedidosDTO>> guardar(@Valid @RequestBody PedidosDTO pedidos) {
         try {
             PedidosDTO guardado = pedidoService.guardar(pedidos);
-            return new ResponseEntity<>(guardado, HttpStatus.CREATED);
+            return ResponseEntity
+                    .created(linkTo(methodOn(PedidosController.class).buscarPorId(guardado.getId())).toUri())
+                    .body(assembler.toModel(guardado));
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PatchMapping("/{id}/estado")
+    @PatchMapping(value = "/{id}/estado", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<Void> alternarEstado(@PathVariable Integer id) {
         try {
             pedidoService.alternarEstado(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
-
-    
 }
