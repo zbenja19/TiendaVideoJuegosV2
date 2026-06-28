@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import tiendavideojuegos.juegos.DTO.OfertaDTO;
 import tiendavideojuegos.juegos.model.Oferta;
 import tiendavideojuegos.juegos.service.OfertaService;
@@ -40,7 +41,7 @@ public class OfertaController {
     }
     
     @PostMapping
-    public ResponseEntity<OfertaDTO> agregarOferta(@RequestBody Oferta oferta){
+    public ResponseEntity<OfertaDTO> agregarOferta(@Valid @RequestBody Oferta oferta){
         try{
             OfertaDTO guardado = ofertaService.guardar(oferta);
             return new ResponseEntity<>(guardado, HttpStatus.CREATED);

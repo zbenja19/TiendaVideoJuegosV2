@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import tiendavideojuegos.juegos.model.Biblioteca;
 import tiendavideojuegos.juegos.service.BibliotecaService;
 
@@ -43,7 +44,7 @@ public class BibliotecaController {
     }
 
     @PostMapping
-    public ResponseEntity<Biblioteca> guardar(@RequestBody Biblioteca biblioteca) {
+    public ResponseEntity<Biblioteca> guardar(@Valid@RequestBody Biblioteca biblioteca) {
         try {
             Biblioteca guardada = bibliotecaService.guardar(biblioteca);
             return new ResponseEntity<>(guardada, HttpStatus.CREATED);

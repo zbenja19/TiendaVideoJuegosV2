@@ -13,7 +13,7 @@ public class CarroValidaciones {
         if (carro.getId() == null || carro.getId() <= 0) {
             return false;
         }
-        if (carro.getCantidad() == null || carro.getCantidad() <= 0) {
+        if (carro.getCantidad() == null || carro.getCantidad() <= 1) {
             return false;
         }
         if (carro.getFechaAgregada() == null) {

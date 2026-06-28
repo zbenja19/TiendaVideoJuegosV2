@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import tiendavideojuegos.juegos.model.Carro;
 import tiendavideojuegos.juegos.service.CarroService;
 
@@ -43,7 +44,7 @@ public class CarroController {
     }
 
     @PostMapping
-    public ResponseEntity<Carro> guardar(@RequestBody Carro carro) {
+    public ResponseEntity<Carro> guardar(@Valid@RequestBody Carro carro) {
         try {
             Carro guardado = carroService.guardar(carro);
             return new ResponseEntity<>(guardado, HttpStatus.CREATED);
