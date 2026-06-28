@@ -1,4 +1,4 @@
-package tiendavideojuegos.juegos.controller;
+package tiendavideojuegos.juegos.controller.v1;
 
 import java.util.List;
 

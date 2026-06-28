@@ -14,6 +14,7 @@ import tiendavideojuegos.juegos.repository.DetalleOfertaRepository;
 @Transactional
 @Service
 public class DetalleOfertaService {
+    
     @Autowired
     private DetalleOfertaRepository detalleOfertaRepository;
 

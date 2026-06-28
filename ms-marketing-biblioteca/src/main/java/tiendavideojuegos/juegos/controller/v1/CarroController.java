@@ -1,4 +1,4 @@
-package tiendavideojuegos.juegos.controller;
+package tiendavideojuegos.juegos.controller.v1;
 
 import java.util.List;
 
@@ -14,49 +14,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tiendavideojuegos.juegos.model.Biblioteca;
-import tiendavideojuegos.juegos.service.BibliotecaService;
+import tiendavideojuegos.juegos.model.Carro;
+import tiendavideojuegos.juegos.service.CarroService;
 
 @RestController
-@RequestMapping("/api/v1/bibliotecas")
-public class BibliotecaController {
+@RequestMapping("/api/v1/carro")
+public class CarroController {
     @Autowired
-    private BibliotecaService bibliotecaService;
+    private CarroService carroService;
 
     @GetMapping
-    public ResponseEntity<List<Biblioteca>> obtenerTodas() {
-        List<Biblioteca> bibliotecas = bibliotecaService.obtenerTodas();
-        if (bibliotecas.isEmpty()) {
+    public ResponseEntity<List<Carro>> obtenerTodo() {
+        List<Carro> items = carroService.obtenerTodo();
+        if (items.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(bibliotecas, HttpStatus.OK);
+        return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Biblioteca> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<Carro> buscarPorId(@PathVariable Integer id) {
         try {
-            Biblioteca biblio = bibliotecaService.buscarPorId(id);
-            return new ResponseEntity<>(biblio, HttpStatus.OK);
+            Carro item = carroService.buscarPorId(id);
+            return new ResponseEntity<>(item, HttpStatus.OK);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Biblioteca> guardar(@RequestBody Biblioteca biblioteca) {
+    public ResponseEntity<Carro> guardar(@RequestBody Carro carro) {
         try {
-            Biblioteca guardada = bibliotecaService.guardar(biblioteca);
-            return new ResponseEntity<>(guardada, HttpStatus.CREATED);
+            Carro guardado = carroService.guardar(carro);
+            return new ResponseEntity<>(guardado, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Biblioteca> actualizar(@PathVariable Integer id, @RequestBody Biblioteca datosNuevos) {
+    public ResponseEntity<Carro> actualizar(@PathVariable Integer id, @RequestBody Carro carroDetalles) {
         try {
-            Biblioteca actualizada = bibliotecaService.actualizar(id, datosNuevos);
-            return new ResponseEntity<>(actualizada, HttpStatus.OK);
+            Carro actualizado = carroService.actualizar(id, carroDetalles);
+            return new ResponseEntity<>(actualizado, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -64,12 +64,18 @@ public class BibliotecaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
-        String resultado = bibliotecaService.eliminar(id);
+        String resultado = carroService.eliminar(id);
         if (resultado.contains("exitosamente")) {
             return new ResponseEntity<>(resultado, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(resultado, HttpStatus.NOT_FOUND);
         }
     }
-}
 
+    @DeleteMapping("/vaciar")
+    public ResponseEntity<Void> vaciarCarrito() {
+        carroService.vaciarCarrito();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+}

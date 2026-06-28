@@ -46,7 +46,7 @@ public class CarroService {
     public String eliminar(Integer id) {
         try {
             Carro carro = carroRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("No se puede eliminar: el ID " + id + " no existe."));
+                .orElseThrow(() -> new RuntimeException("No se puede eliminar: el ID " + id + " no existe."));
             carroRepository.delete(carro);
             return "Producto eliminado del carrito exitosamente.";
         } catch (RuntimeException e) {
@@ -55,6 +55,7 @@ public class CarroService {
     }
 
     public void vaciarCarrito() {
+        carroRepository.deleteAll();
 
     }
 
