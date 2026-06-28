@@ -1,4 +1,4 @@
-package com.tiendavideojuegos.tiendavideojuegos.controller;
+package com.tiendavideojuegos.tiendavideojuegos.controller.v1;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import com.tiendavideojuegos.tiendavideojuegos.DTO.ClientesDTO;
 import com.tiendavideojuegos.tiendavideojuegos.model.Clientes;
 import com.tiendavideojuegos.tiendavideojuegos.service.ClientesService;
 
-@RestController
+@RestController("ClientesControllerV1")
 @RequestMapping("/api/v1/Clientes")
 public class ClientesController {
     

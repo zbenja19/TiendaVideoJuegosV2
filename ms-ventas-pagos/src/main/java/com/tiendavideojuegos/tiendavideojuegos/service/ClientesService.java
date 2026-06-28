@@ -10,9 +10,6 @@ import com.tiendavideojuegos.tiendavideojuegos.DTO.ClientesDTO;
 import com.tiendavideojuegos.tiendavideojuegos.model.Clientes;
 import com.tiendavideojuegos.tiendavideojuegos.repository.ClientesRepository;
 
-import jakarta.transaction.Transactional;
-
-@Transactional
 @Service
 public class ClientesService {
 

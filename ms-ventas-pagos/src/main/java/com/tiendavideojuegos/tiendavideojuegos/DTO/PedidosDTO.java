@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class PedidosDTO {
-
     private Integer id;
     private Integer clienteId;
     private LocalDate fechaAgregada;

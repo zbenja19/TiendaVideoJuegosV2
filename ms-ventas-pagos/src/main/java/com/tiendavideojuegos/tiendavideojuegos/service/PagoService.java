@@ -28,7 +28,8 @@ public class PagoService {
     }
 
     public PagoDTO buscarPorId(Integer idPago) {
-        Pago pago = pagoRepository.findById(idPago).orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+        Pago pago = pagoRepository.findById(idPago)
+                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
         return convertirAPagoDTO(pago);
     }
 
@@ -43,5 +44,4 @@ public class PagoService {
         pagoDTO.setEstadoPago(pago.getEstadoPago());
         return pagoDTO;
     }
-
 }

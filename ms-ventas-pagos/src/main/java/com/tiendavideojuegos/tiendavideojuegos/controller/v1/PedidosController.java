@@ -1,4 +1,4 @@
-package com.tiendavideojuegos.tiendavideojuegos.controller;
+package com.tiendavideojuegos.tiendavideojuegos.controller.v1;
 
 
 import java.util.List;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tiendavideojuegos.tiendavideojuegos.DTO.PedidosDTO;
 import com.tiendavideojuegos.tiendavideojuegos.service.PedidosService;
 
-@RestController
+@RestController("PedidosControllerV1")
 @RequestMapping("/api/v1/Pedidos")
 public class PedidosController {
     @Autowired

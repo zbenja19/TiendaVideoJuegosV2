@@ -1,21 +1,21 @@
-package com.tiendavideojuegos.tiendavideojuegos.controller;
+package com.tiendavideojuegos.tiendavideojuegos.controller.v1;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.convert.ReadingConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tiendavideojuegos.tiendavideojuegos.DTO.PagoDTO;
 import com.tiendavideojuegos.tiendavideojuegos.model.Pago;
 import com.tiendavideojuegos.tiendavideojuegos.service.PagoService;
 
-@ReadingConverter
+@RestController("PagoControllerV1")
 @RequestMapping("/api/v1/pago")
 public class PagoController {
 
