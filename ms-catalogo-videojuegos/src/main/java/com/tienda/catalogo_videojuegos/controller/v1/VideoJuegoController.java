@@ -1,7 +1,8 @@
-package com.tienda.catalogo_videojuegos.controller;
+package com.tienda.catalogo_videojuegos.controller.v1;
 
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+
 import com.tienda.catalogo_videojuegos.DTO.VideoJuegoDTO;
 import com.tienda.catalogo_videojuegos.model.VideoJuego;
 import com.tienda.catalogo_videojuegos.service.VideoJuegoService;
@@ -22,7 +25,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@RestController
+@RestController("videoJuegoControllerV1")
 @RequestMapping("/api/v1/videojuegos")
 @Tag(name = "Videojuegos",description = "Operaciones para la gestion del catalogo de videojuegos")
 public class VideoJuegoController {
@@ -66,9 +69,9 @@ public class VideoJuegoController {
     @Operation(summary = "Crear videojuego", description = "Crea un nuevo videojuego")
     @ApiResponse(responseCode = "201", description = "Videojuego creado correctamente")
     @ApiResponse(responseCode = "400", description = "Datos invalidos")
-    public ResponseEntity<?> guardar(@RequestBody VideoJuego videoJuego){
+    public ResponseEntity<?> guardar(@Valid @RequestBody VideoJuego videoJuego){
         try {
-            VideoJuego videoJuegoGuardado = videoJuegoService.guardar(videoJuego);
+            VideoJuegoDTO videoJuegoGuardado = videoJuegoService.guardar(videoJuego);
             return new ResponseEntity<>(videoJuegoGuardado,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error al guardar:" + e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -79,7 +82,7 @@ public class VideoJuegoController {
     @Operation(summary = "Actualiza videojuego", description = "Actualiza el videojuego existente")
     @ApiResponse(responseCode = "200", description = "Actualizado exitosamente")
     @ApiResponse(responseCode = "404", description = "Videojuego no encontrado")
-    public ResponseEntity<?> actualizar (@PathVariable Integer id, @RequestBody VideoJuego videoJuego){
+    public ResponseEntity<?> actualizar (@PathVariable Integer id,@Valid @RequestBody VideoJuego videoJuego){
         try {
             VideoJuegoDTO actualizado = videoJuegoService.actualizarVideoJuego(id, videoJuego);
             return new ResponseEntity<>(actualizado,HttpStatus.OK);

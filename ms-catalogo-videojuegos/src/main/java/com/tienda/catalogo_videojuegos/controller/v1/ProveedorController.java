@@ -1,4 +1,4 @@
-package com.tienda.catalogo_videojuegos.controller;
+package com.tienda.catalogo_videojuegos.controller.v1;
 
 import java.util.List;
 
@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tienda.catalogo_videojuegos.DTO.ProveedorDTO;
 import com.tienda.catalogo_videojuegos.model.Proveedor;
 import com.tienda.catalogo_videojuegos.service.ProveedorService;
+import jakarta.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@RestController
+@RestController("proveedorControllerV1")
 @RequestMapping("/api/v1/proveedores")
 @Tag(name = "Proveedores",description = "Operaciones para la gestion de proveedores")
 public class ProveedorController {
@@ -58,9 +59,9 @@ public class ProveedorController {
     @Operation(summary = "Crear proveedor", description = "Crea un nuevo proveedor")
     @ApiResponse(responseCode = "201", description = "Proveedor creado correctamente")
     @ApiResponse(responseCode = "400", description = "Datos invalidos")
-    public ResponseEntity<?> guardar(@RequestBody Proveedor proveedor){
+    public ResponseEntity<?> guardar(@Valid @RequestBody Proveedor proveedor){
         try {
-            Proveedor proveedorGuardado = proveedorService.guardarProveedor(proveedor);
+            ProveedorDTO proveedorGuardado = proveedorService.guardarProveedor(proveedor);
             return new ResponseEntity<>(proveedorGuardado,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error al guardar:" + e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -71,7 +72,7 @@ public class ProveedorController {
     @Operation(summary = "Actualiza proveedor", description = "Actualiza el proveedor existente")
     @ApiResponse(responseCode = "200", description = "Actualizado exitosamente")
     @ApiResponse(responseCode = "404", description = "Proveedor no encontrado")
-    public ResponseEntity<?> actualizar (@PathVariable Integer id, @RequestBody Proveedor nvoProveedor){
+    public ResponseEntity<?> actualizar (@PathVariable Integer id,@Valid @RequestBody Proveedor nvoProveedor){
         try {
             ProveedorDTO actualizado = proveedorService.actualizarProveedor(id, nvoProveedor);
             return new ResponseEntity<>(actualizado,HttpStatus.OK);

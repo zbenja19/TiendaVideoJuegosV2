@@ -1,4 +1,4 @@
-package com.tienda.catalogo_videojuegos.controller;
+package com.tienda.catalogo_videojuegos.controller.v1;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tienda.catalogo_videojuegos.DTO.CategoriaDTO;
 import com.tienda.catalogo_videojuegos.model.Categoria;
 import com.tienda.catalogo_videojuegos.service.CategoriaService;
+import jakarta.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@RestController
+@RestController("categoriaControllerV1")
 @RequestMapping("/api/v1/categorias")
 @Tag(name = "Categorias",description = "Operaciones para la gestion de categorias")
 public class CategoriaController {
@@ -58,9 +59,9 @@ public class CategoriaController {
     @Operation(summary = "Crear categoria", description = "Crea una nueva categoria")
     @ApiResponse(responseCode = "201", description = "Categoria creada correctamente")
     @ApiResponse(responseCode = "400", description = "Datos invalidos")
-    public ResponseEntity<?> guardar(@RequestBody Categoria categoria){
+    public ResponseEntity<?> guardar(@Valid @RequestBody Categoria categoria){
         try {
-            Categoria categoriaGuardada = categoriaService.guardar(categoria);
+            CategoriaDTO categoriaGuardada = categoriaService.guardar(categoria);
             return new ResponseEntity<>(categoriaGuardada,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error al guardar:" + e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -71,7 +72,7 @@ public class CategoriaController {
     @Operation(summary = "Actualiza categoria", description = "Actualiza la categoria existente")
     @ApiResponse(responseCode = "200", description = "Actualizada exitosamente")
     @ApiResponse(responseCode = "404", description = "Categoria no encontrada")
-    public ResponseEntity<?> actualizar (@PathVariable Integer id, @RequestBody Categoria categoria){
+    public ResponseEntity<?> actualizar (@PathVariable Integer id,@Valid @RequestBody Categoria categoria){
         try {
             CategoriaDTO actualizada = categoriaService.actualizarCategoria(id, categoria);
             return new ResponseEntity<>(actualizada,HttpStatus.OK);

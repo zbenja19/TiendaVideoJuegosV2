@@ -23,7 +23,7 @@ public class Plataforma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idPlataforma;
 
     @NotBlank(message ="El nombre de la plataforma es obligatoria")
     @Size(min=2,max=50)

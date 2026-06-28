@@ -26,17 +26,20 @@ public class VideoJuegoService {
                         .toList();
     }
 
-    public VideoJuego guardar(VideoJuego videoJuego){
+    public VideoJuegoDTO guardar(VideoJuego videoJuego){
         if(!videoJuegoValidaciones.validarNullVacio(videoJuego)){
-            throw new RuntimeException("Debes ingresar el nombre del proveedor");
+            throw new RuntimeException("Debes ingresar el nombre del videojuego");
         }
         videoJuego.setNombre(videoJuego.getNombre().trim());   
         boolean existeVideoJuego = videojuegoRepository.existsByNombreIgnoreCase(videoJuego.getNombre());
         
         if (existeVideoJuego){
-            throw new RuntimeException("El Videojuego" + videoJuego.getNombre() + "ya de encuentra registrado.");
+            throw new RuntimeException("El Videojuego " + videoJuego.getNombre() + " ya de encuentra registrado.");
             
-        }return videojuegoRepository.save(videoJuego);
+        }
+        
+        VideoJuego videoJuegoGuardado = videojuegoRepository.save(videoJuego);
+        return videoJuegoValidaciones.convertirADTO(videoJuegoGuardado);
     }
 
     public String eliminar(Integer id){
@@ -44,7 +47,7 @@ public class VideoJuegoService {
         .orElseThrow(() -> new RuntimeException("VideoJuego no encontrado."));
     
         videojuegoRepository.delete(videoJ);
-        return "El videojuego" + videoJ.getNombre() + "eliminado exitosamente.";
+        return "Videojuego " + videoJ.getNombre() + " eliminado exitosamente.";
     } 
 
     public VideoJuegoDTO buscarPorId(Integer id){
