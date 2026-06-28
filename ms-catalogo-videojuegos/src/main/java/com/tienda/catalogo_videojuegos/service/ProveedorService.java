@@ -26,7 +26,7 @@ public class ProveedorService {
                         .toList();
     }
 
-    public Proveedor guardarProveedor(Proveedor proveedor){
+    public ProveedorDTO guardarProveedor(Proveedor proveedor){
         if(!proveedorValidaciones.validarNullVacio(proveedor)){
             throw new RuntimeException("Debes ingresar el nombre del proveedor");
         }
@@ -39,7 +39,10 @@ public class ProveedorService {
         if (existeProveedor){
             throw new RuntimeException("El Proveedor " + proveedor.getNombre() + " ya se encuentra registrado.");
             
-        }return proveedorRepository.save(proveedor);     
+        }
+        
+        Proveedor proveedorGuardado = proveedorRepository.save(proveedor);
+        return proveedorValidaciones.convertirADTO(proveedorGuardado);     
     }
 
     public String eliminar(Integer id) {

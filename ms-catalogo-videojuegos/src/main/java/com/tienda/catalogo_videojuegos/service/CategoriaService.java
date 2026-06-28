@@ -27,7 +27,7 @@ public class CategoriaService {
         .toList();
     }
 
-    public Categoria guardar(Categoria categoria){
+    public CategoriaDTO guardar(Categoria categoria){
         if(!categoriaValidaciones.validarNullVacio(categoria)){
             throw new RuntimeException("Debes ingresar el nombre de la categoria");
         }
@@ -37,7 +37,11 @@ public class CategoriaService {
         if (existeCategoria){
             throw new RuntimeException("La categoria " + categoria.getNombre() + " ya se encuentra registrada");
             
-        }return categoriaRepository.save(categoria);    
+        }
+
+        Categoria categoriaGuardada = categoriaRepository.save(categoria);
+        
+        return categoriaValidaciones.convertirADTO(categoriaGuardada);
     }
 
     public String eliminar(Integer id){
@@ -51,7 +55,7 @@ public class CategoriaService {
 
     public CategoriaDTO buscarPorId(Integer id){
         Categoria categoria = categoriaRepository.findById(id)
-           .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+           .orElseThrow(() -> new RuntimeException("¡La categoria no esta registrada!"));
         return categoriaValidaciones.convertirADTO(categoria);
     }
 
