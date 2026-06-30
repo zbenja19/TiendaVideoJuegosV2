@@ -1,6 +1,7 @@
 package com.tienda.catalogo_videojuegos.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -12,12 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import com.tienda.catalogo_videojuegos.DTO.PlataformaDTO;
 import com.tienda.catalogo_videojuegos.model.Plataforma;
 import com.tienda.catalogo_videojuegos.repository.PlataformaRepository;
 
 @SpringBootTest
 class PlataformaServiceTest {
 
+   
     @Autowired
     private PlataformaService plataformaService;
 
@@ -37,7 +40,7 @@ class PlataformaServiceTest {
         when(plataformaRepository.findAll()).thenReturn(List.of(createPlataforma()));
 
         // When
-        List<Plataforma> resultado = plataformaService.obtenerTodas();
+        List<PlataformaDTO> resultado = plataformaService.obtenerTodas();
 
         // Then
         assertNotNull(resultado);
@@ -50,7 +53,7 @@ class PlataformaServiceTest {
         when(plataformaRepository.findById(1)).thenReturn(Optional.of(createPlataforma()));
 
         // When
-        Plataforma resultado = plataformaService.buscarPorId(1);
+        PlataformaDTO resultado = plataformaService.buscarPorId(1);
 
         // Then
         assertNotNull(resultado);
@@ -64,7 +67,7 @@ class PlataformaServiceTest {
         when(plataformaRepository.save(any(Plataforma.class))).thenReturn(p);
 
         // When
-        Plataforma resultado = plataformaService.guardar(p);
+        PlataformaDTO resultado = plataformaService.guardar(p);
 
         // Then
         assertNotNull(resultado);
@@ -95,7 +98,7 @@ class PlataformaServiceTest {
         when(plataformaRepository.save(any(Plataforma.class))).thenReturn(existente);
 
         // When
-        Plataforma resultado = plataformaService.actualizarPlataforma(1, nvaPlataforma);
+        PlataformaDTO resultado = plataformaService.actualizarPlataforma(1, nvaPlataforma);
 
         // Then
         assertNotNull(resultado);

@@ -19,6 +19,7 @@ import com.tienda.catalogo_videojuegos.model.VideoJuego;
 import com.tienda.catalogo_videojuegos.repository.CategoriaRepository;
 import com.tienda.catalogo_videojuegos.repository.VideoJuegoRepository;
 
+
 @SpringBootTest
 public class CategoriaServiceTest {
 
@@ -30,6 +31,9 @@ public class CategoriaServiceTest {
 
     @MockitoBean
     private VideoJuegoRepository videojuegoRepository;
+
+    @MockitoBean
+    private VideoJuegoValidaciones videoJuegoValidaciones;
 
     private Categoria createCategoria() {
         Categoria categoria = new Categoria();
@@ -79,7 +83,7 @@ public class CategoriaServiceTest {
             categoriaService.buscarPorId(2);
         });
 
-        assertEquals("¡La categoria no esta registrado!", exception.getMessage());
+        assertEquals("¡La categoria no esta registrada!", exception.getMessage());
     }
 
     @Test
@@ -90,7 +94,7 @@ public class CategoriaServiceTest {
         when(categoriaRepository.save(any(Categoria.class))).thenReturn(categoriaInput);
         // WHEN
 
-        Categoria resultado = categoriaService.guardar(categoriaInput);
+        CategoriaDTO resultado = categoriaService.guardar(categoriaInput);
         // THEN
 
         assertNotNull(resultado);

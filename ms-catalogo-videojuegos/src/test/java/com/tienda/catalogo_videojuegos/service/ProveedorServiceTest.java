@@ -1,6 +1,7 @@
 package com.tienda.catalogo_videojuegos.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import com.tienda.catalogo_videojuegos.repository.ProveedorRepository;
 @SpringBootTest
 class ProveedorServiceTest {
 
+    
     @Autowired
     private ProveedorService proveedorService;
 
@@ -54,7 +56,7 @@ class ProveedorServiceTest {
         when(proveedorRepository.save(any(Proveedor.class))).thenReturn(prov);
 
         // When
-        Proveedor resultado = proveedorService.guardarProveedor(prov);
+        ProveedorDTO resultado = proveedorService.guardarProveedor(prov);
 
         // Then
         assertNotNull(resultado);

@@ -18,7 +18,7 @@ public class PlataformaValidaciones {
     public PlataformaDTO convertirADTO (Plataforma plataforma) {
         PlataformaDTO plataformaDTO = new PlataformaDTO();
         
-        plataformaDTO.setIdPlataforma(plataforma.getIdPlataforma());
+        plataformaDTO.setIdPlataforma(plataforma.getId());
         plataformaDTO.setNombre(plataforma.getNombre());
 
         return plataformaDTO;

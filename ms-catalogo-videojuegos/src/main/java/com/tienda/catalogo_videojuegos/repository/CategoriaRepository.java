@@ -8,4 +8,5 @@ import com.tienda.catalogo_videojuegos.model.Categoria;
 @Repository
 public interface  CategoriaRepository extends JpaRepository<Categoria, Integer>{
 
+     boolean existsByNombreIgnoreCase(String nombre);
 }

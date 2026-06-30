@@ -8,4 +8,6 @@ import com.tienda.catalogo_videojuegos.model.Plataforma;
 @Repository
 public interface  PlataformaRepository extends  JpaRepository<Plataforma, Integer>{
 
+    boolean existsByNombreIgnoreCase(String nombre);
+
 }
