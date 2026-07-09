@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 import tiendavideojuegos.juegos.model.Biblioteca;
 import tiendavideojuegos.juegos.service.BibliotecaService;
 
-@RestController
+@RestController("bibliotecaControllerV1")
 @RequestMapping("/api/v1/bibliotecas")
 public class BibliotecaController {
     @Autowired

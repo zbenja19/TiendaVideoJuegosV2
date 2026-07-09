@@ -18,7 +18,7 @@ spring:
             - id: ms-marketing-biblioteca
               uri: lb://ms-marketing-biblioteca
               predicates:
-                - Path=/api/v1/marketing/**
+                - Path=/api/v1/bibliotecas/**
 
             - id: ms-ventas-pagos
               uri: lb://ms-ventas-pagos

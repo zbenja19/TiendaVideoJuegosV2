@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import tiendavideojuegos.juegos.DTO.OfertaDTO;
-import tiendavideojuegos.juegos.controller.v2.OfertaController; // <-- Apunta a v2
+import tiendavideojuegos.juegos.controller.v2.OfertaController;
 
 @Component
 public class OfertaModelAssembler implements RepresentationModelAssembler<OfertaDTO, EntityModel<OfertaDTO>> {
@@ -16,8 +16,8 @@ public class OfertaModelAssembler implements RepresentationModelAssembler<Oferta
     @Override
     public EntityModel<OfertaDTO> toModel(OfertaDTO ofertaDTO) {
         return EntityModel.of(ofertaDTO,
-            linkTo(methodOn(OfertaController.class).obtenerPorId(ofertaDTO.getIdOferta())).withSelfRel(),
-            linkTo(methodOn(OfertaController.class).listarTodos()).withRel("ofertas")
+            linkTo(methodOn(OfertaController.class).buscarPorId(ofertaDTO.getIdOferta())).withSelfRel(),
+            linkTo(methodOn(OfertaController.class).todasLasOfertas()).withRel("ofertas")
         );
     }
 }

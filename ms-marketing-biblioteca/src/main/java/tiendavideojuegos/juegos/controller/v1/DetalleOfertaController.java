@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tiendavideojuegos.juegos.DTO.DetalleOfertaDTO;
 import tiendavideojuegos.juegos.service.DetalleOfertaService;
-@RestController
+@RestController("detalleOfertaControllerV1")
 @RequestMapping("/api/v1/detalle-ofertas")
 public class DetalleOfertaController {
     

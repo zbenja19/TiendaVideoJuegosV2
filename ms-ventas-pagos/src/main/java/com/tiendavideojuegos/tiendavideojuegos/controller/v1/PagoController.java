@@ -16,7 +16,7 @@ import com.tiendavideojuegos.tiendavideojuegos.model.Pago;
 import com.tiendavideojuegos.tiendavideojuegos.service.PagoService;
 
 @RestController("PagoControllerV1")
-@RequestMapping("/api/v1/pago")
+@RequestMapping("/api/v1/pagos")
 public class PagoController {
 
     @Autowired

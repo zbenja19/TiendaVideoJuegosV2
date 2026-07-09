@@ -18,8 +18,8 @@ import jakarta.validation.Valid;
 import tiendavideojuegos.juegos.model.Carro;
 import tiendavideojuegos.juegos.service.CarroService;
 
-@RestController
-@RequestMapping("/api/v1/carro")
+@RestController("carroControllerV1")
+@RequestMapping("/api/v1/carros")
 public class CarroController {
     @Autowired
     private CarroService carroService;

@@ -15,7 +15,8 @@ import jakarta.validation.Valid;
 import tiendavideojuegos.juegos.DTO.OfertaDTO;
 import tiendavideojuegos.juegos.model.Oferta;
 import tiendavideojuegos.juegos.service.OfertaService;
-@RestController
+
+@RestController("ofertaControllerV1")
 @RequestMapping("/api/v1/ofertas")
 public class OfertaController {
     @Autowired
