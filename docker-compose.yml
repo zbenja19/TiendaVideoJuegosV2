@@ -10,9 +10,9 @@ services:
    environment:
      MYSQL_ROOT_PASSWORD: ""
      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-     MYSQL_DATABASE: db_imperio_jedis_dev
+     MYSQL_DATABASE: db_ventas_pagos_dev
    networks:
-     - network-jedi
+     - network-ms-ventas-pagos
    healthcheck:
      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root"]
      interval: 10s
@@ -26,7 +26,7 @@ services:
    ports:
      - "8761:8761"
    networks:
-     - network-jedi
+     - network-ms-ventas-pagos
    healthcheck:
      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
      interval: 15s
@@ -36,7 +36,7 @@ services:
 
 
  api-gateway:
-   build: ./gateway
+   build: ./api-gateway
    container_name: api-gateway
    ports:
      - "8080:8080"
@@ -44,46 +44,28 @@ services:
      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
      SPRING_PROFILES_ACTIVE: dev
    networks:
-     - network-jedi
+     - network-ms-ventas-pagos
    depends_on:
      eureka-server:
        condition: service_healthy
 
 
- jedis-service:
-   build: ./jedis
-   container_name: jedis-service
+ ms-ventas-pagos:
+   build: ./ms-ventas-pagos
+   container_name: ms-ventas-pagos
    environment:
      SPRING_PROFILES_ACTIVE: dev
      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
      DATABASE_HOST: mariadb-db
      GATEWAY_URL: http://localhost:8080
    networks:
-     - network-jedi
+     - network-ms-ventas-pagos
    depends_on:
      mariadb-db:
        condition: service_healthy
      eureka-server:
        condition: service_healthy
-
-
- sables-service:
-   build: ./sables
-   container_name: sables-service
-   environment:
-     SPRING_PROFILES_ACTIVE: dev
-     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
-     DATABASE_HOST: mariadb-db
-     GATEWAY_URL: http://localhost:8080
-   networks:
-     - network-jedi
-   depends_on:
-     mariadb-db:
-       condition: service_healthy
-     eureka-server:
-       condition: service_healthy
-
 
 networks:
- network-jedi:
-   driver: bridge
+  network-ms-ventas-pagos:
+    driver: bridge
