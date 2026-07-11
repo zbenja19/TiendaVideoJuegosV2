@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,6 +88,17 @@ public class PlataformaController {
             PlataformaDTO actualizada = plataformaService.actualizarPlataforma(id, plataforma);
             return ResponseEntity.ok(assembler.toModel(actualizada));
             
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar (@PathVariable Integer id){
+        try {
+            String mensajeEliminar = plataformaService.eliminar(id);
+            return ResponseEntity.ok(mensajeEliminar);
+
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

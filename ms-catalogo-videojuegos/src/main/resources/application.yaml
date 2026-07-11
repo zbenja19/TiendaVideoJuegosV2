@@ -1,28 +1,11 @@
 server:
-  port: 8081
-
-spring:
-  application:
-    name: ms-catalogo-videojuegos
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/db_catalogo_videojuegos?createDatabaseIfNotExist=true
-    username: root
-    password:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
+  port: 0
+  forward-headers-strategy: framework
 
 springdoc:
   api-docs:
-    enabled: true
+    path: /catalogo/api-docs
+  packages-to-scan: com.tienda.catalogo_videojuegos.controller
 
   swagger-ui:
     enabled: true
@@ -31,7 +14,38 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
 
   instance:
     prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+spring:
+  application:
+    name: ms-catalogo-videojuegos
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:3306/db_catalogo_videojuegos?createDatabaseIfNotExist=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  mvc:
+    cors:
+      mappings:
+        "/**":
+          allowed-origin-patterns: "*"
+          allowed-methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+          allowed-headers: "*"
+          exposed-headers: "*"
+          allow-credentials: false
+          max-age: 3600

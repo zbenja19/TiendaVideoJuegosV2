@@ -3,10 +3,8 @@ package com.tienda.catalogo_videojuegos.assemblers;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
-
 import com.tienda.catalogo_videojuegos.DTO.VideoJuegoDTO;
 import com.tienda.catalogo_videojuegos.controller.v2.VideoJuegoController;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -17,10 +15,10 @@ public class VideoJuegoModelAssembler implements RepresentationModelAssembler<Vi
     public EntityModel<VideoJuegoDTO> toModel(VideoJuegoDTO videoJuego){
         return EntityModel.of(videoJuego,
         linkTo(methodOn(VideoJuegoController.class).buscarPorId(videoJuego.getIdVideoJuego())).withSelfRel(),
-        linkTo(methodOn(VideoJuegoController.class).listar()).withRel("categoria")
+        linkTo(methodOn(VideoJuegoController.class).listar()).withRel("categoria"),
+        linkTo(methodOn(VideoJuegoController.class).guardar(null)).withRel("guardar"),
+        linkTo(methodOn(VideoJuegoController.class).actualizar(videoJuego.getIdVideoJuego(),null)).withRel("actualizar"),
+        linkTo(methodOn(VideoJuegoController.class).eliminar(videoJuego.getIdVideoJuego())).withRel("eliminar")
         );
-
     }
-    
-
 }
