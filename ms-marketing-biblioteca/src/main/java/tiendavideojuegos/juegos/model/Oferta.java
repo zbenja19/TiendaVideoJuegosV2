@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class Oferta {
     private Integer idOferta;
 
     @NotNull(message = "El descuento es obligatorio")
+    @Max (value = 100, message = "El descuento no puede ser mayor del 100%")
     @Min(value = 0 , message = "El descuento no puede ser negativo")
     @Column(name = "descuento", nullable = false)
     private Double descuento;

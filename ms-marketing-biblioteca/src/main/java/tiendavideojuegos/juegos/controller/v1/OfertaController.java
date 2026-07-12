@@ -19,6 +19,7 @@ import tiendavideojuegos.juegos.service.OfertaService;
 @RestController("ofertaControllerV1")
 @RequestMapping("/api/v1/ofertas")
 public class OfertaController {
+    
     @Autowired
     private OfertaService ofertaService;
 
@@ -50,5 +51,4 @@ public class OfertaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 }
