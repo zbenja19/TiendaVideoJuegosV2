@@ -65,6 +65,7 @@ services:
 
 
  # ms-marketing-biblioteca
+<<<<<<< HEAD
   ms-marketing-biblioteca:
     build: ./ms-marketing-biblioteca
     container_name: ms-marketing-biblioteca
@@ -80,6 +81,8 @@ services:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+=======
+>>>>>>> 1d07918787a4deb37ed3fa0861765ed4cffd4d96
 
 
 
@@ -104,4 +107,8 @@ services:
 
 networks:
   network-tienda:
+<<<<<<< HEAD
     driver: bridge
+=======
+    driver: bridge
+>>>>>>> 1d07918787a4deb37ed3fa0861765ed4cffd4d96

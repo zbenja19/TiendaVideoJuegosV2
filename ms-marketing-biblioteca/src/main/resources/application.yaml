@@ -5,7 +5,11 @@ server:
 springdoc:
   api-docs:
     path: /marketing/api-docs
+<<<<<<< HEAD
   packages-to-scan: com.tienda.ms_marketing_biblioteca.controller
+=======
+  packages-to-scan: tiendavideojuegos.juegos.controller
+>>>>>>> 1d07918787a4deb37ed3fa0861765ed4cffd4d96
 
   swagger-ui:
     enabled: true
@@ -14,7 +18,11 @@ springdoc:
 eureka:
   client:
     service-url:
+<<<<<<< HEAD
       defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+=======
+      defaultZone: http://localhost:8761/eureka/
+>>>>>>> 1d07918787a4deb37ed3fa0861765ed4cffd4d96
 
   instance:
     prefer-ip-address: true

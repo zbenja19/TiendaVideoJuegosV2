@@ -11,6 +11,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,6 +88,17 @@ public class ProveedorController {
             ProveedorDTO actualizado = proveedorService.actualizarProveedor(id, nvoProveedor);
             return ResponseEntity.ok(assembler.toModel(actualizado));
             
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar (@PathVariable Integer id){
+        try {
+            String mensajeEliminar = proveedorService.eliminar(id);
+            return ResponseEntity.ok(mensajeEliminar);
+
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

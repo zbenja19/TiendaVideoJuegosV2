@@ -1,5 +1,6 @@
 server:
   port: 8080
+  forward-headers-strategy: framework
 
 spring:
   application:
@@ -9,18 +10,64 @@ spring:
     gateway:
       server:
         webmvc:
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origin-patterns: "*"
+                allowed-methods: "*"
+                allowed-headers: "*"
+                exposed-headers: "*"
+                allow-credentials: false
+                max-age: 3600
+
           routes:
+
+            # Catalogo-videojuegos
+
             - id: ms-catalogo-videojuegos
               uri: lb://ms-catalogo-videojuegos
               predicates:
-                - Path=/api/v1/videojuegos/**
+                - Path=/api/v1/videojuegos/**,/api/v2/videojuegos/**,/catalogo/api-docs/**
+
+            # Marketing-biblioteca
 
             - id: ms-marketing-biblioteca
               uri: lb://ms-marketing-biblioteca
               predicates:
-                - Path=/api/v1/bibliotecas/**
+                - Path=/api/v1/bibliotecas/**,/api/v2/bibliotecas/**,/marketing/api-docs/**
+
+            # Ventas-pagos
 
             - id: ms-ventas-pagos
               uri: lb://ms-ventas-pagos
               predicates:
-                - Path=/api/v1/pagos/**
+                - Path=/api/v1/pagos/**,/api/v2/pagos/**,/ventas/api-docs/**
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+
+    urls:
+      - name: Microservicio Catálogo
+        url: /catalogo/api-docs
+
+      - name: Microservicio Marketing
+        url: /marketing/api-docs
+
+      - name: Microservicio Ventas
+        url: /ventas/api-docs
+
+    disable-swagger-default-url: true
+    display-request-duration: true
+
+  api-docs:
+    enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+
+  instance:
+    prefer-ip-address: true
